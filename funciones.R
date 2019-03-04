@@ -31,6 +31,10 @@ frecuencia_palabras <- function(tidytext,color){
 }
 
 analisis_sentimientos <- function(tidytext){
-  
-  
+  sentimientos <- tidytext %>% anti_join(custom_stop_words) %>% dplyr::filter(!str_detect(word, "^[0-9]")) %>% unnest_tokens(input = "word", output = "Palabra") %>% 
+    inner_join(afinn, ., by = "Palabra")  %>% 
+  mutate(Tipo = ifelse(Puntuacion > 0, "Positiva", "Negativa")) %>% dplyr::rename(word=Palabra)
+  l.sentimientos <- split(sentimientos,sentimientos$Tipo)
+  wc.sent <- lapply(l.sentimientos, function(x) frecuencia_palabras(x,color))
 }
+
