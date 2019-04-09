@@ -25,6 +25,8 @@ pdf2tidytext <- function(pdffile){
   text_df <- lapply(text, function(x) tibble(text=x))
   text_df <- bind_rows(text_df)
   tidytext <- text_df %>% unnest_tokens(word,text)
+  #el programa del PSOE se lle mal quedano palabras separadas por letras
+  tidytext <- tidytext %>% dplyr::filter(nchar(word)>2)
   return(tidytext)
 }
 
@@ -85,3 +87,15 @@ analiza_programas <- function(partido){
 ![Frecuencia general de palabras](frecuencia_VOX.svg)
 ![Frecuencia de palabras positivas](sentimientos_VOX_positivos.svg)
 ![Frecuencia de palabras negativas](sentimientos_VOX_negativos.svg)
+
+### PP
+
+![Frecuencia general de palabras](frecuencia_PP.svg)
+![Frecuencia de palabras positivas](sentimientos_PP_positivos.svg)
+![Frecuencia de palabras negativas](sentimientos_PP_negativos.svg)
+
+### PSOE
+
+![Frecuencia general de palabras](frecuencia_PSOE.svg)
+![Frecuencia de palabras positivas](sentimientos_PSOE_positivos.svg)
+![Frecuencia de palabras negativas](sentimientos_PSOE_negativos.svg)

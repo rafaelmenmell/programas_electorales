@@ -15,6 +15,7 @@ afinn <- read.csv("lexico_afinn.en.es.csv", stringsAsFactors = F, fileEncoding =
   tbl_df()
 
 pdf2tidytext <- function(pdffile){
+
   text <- pdf_text(pdffile) 
   text <- text[text!=""]
   #si no tiene retorno se lo ponemos
@@ -23,8 +24,11 @@ pdf2tidytext <- function(pdffile){
   text_df <- lapply(text, function(x) tibble(text=x))
   text_df <- bind_rows(text_df)
   tidytext <- text_df %>% unnest_tokens(word,text)
+  #el programa del PSOE se lle mal quedano palabras separadas por letras
+  tidytext <- tidytext %>% dplyr::filter(nchar(word)>2)
   return(tidytext)
 }
+
 
 poner_retorno <- function(x){
   if(grepl("\n",x)){
